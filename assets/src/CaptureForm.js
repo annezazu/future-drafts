@@ -4,11 +4,13 @@ import {
 	TextControl,
 	TextareaControl,
 	DatePicker,
+	Dropdown,
 	Notice,
 	Flex,
 	FlexItem,
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
+import { dateI18n } from '@wordpress/date';
 import { createEntry, today, addDays, addMonths } from './api';
 
 const PRESETS = [
@@ -82,11 +84,35 @@ export default function CaptureForm( { onCreated } ) {
 							</Button>
 						</FlexItem>
 					) ) }
+					<FlexItem>
+						<Dropdown
+							popoverProps={ { placement: 'bottom-start' } }
+							renderToggle={ ( { isOpen, onToggle } ) => (
+								<Button
+									variant="secondary"
+									size="small"
+									onClick={ onToggle }
+									aria-expanded={ isOpen }
+								>
+									{ date
+										? dateI18n( 'M j, Y', `${ date }T00:00:00` )
+										: __( 'Pick a date', 'future-drafts' ) }
+								</Button>
+							) }
+							renderContent={ ( { onClose } ) => (
+								<div className="future-drafts-capture__datepicker">
+									<DatePicker
+										currentDate={ date || undefined }
+										onChange={ ( value ) => {
+											setDate( value ? value.slice( 0, 10 ) : null );
+											onClose();
+										} }
+									/>
+								</div>
+							) }
+						/>
+					</FlexItem>
 				</Flex>
-				<DatePicker
-					currentDate={ date || undefined }
-					onChange={ ( value ) => setDate( value ? value.slice( 0, 10 ) : null ) }
-				/>
 			</div>
 			{ error && <Notice status="error" isDismissible={ false }>{ error }</Notice> }
 			<div className="future-drafts-capture__actions">
