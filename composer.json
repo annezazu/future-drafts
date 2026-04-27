@@ -1,0 +1,26 @@
+{
+    "name": "annezazu/future-drafts",
+    "description": "WordPress dashboard widget for capturing time-delayed drafts that resurface on a chosen date.",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "php": ">=8.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.6",
+        "yoast/phpunit-polyfills": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "FutureDrafts\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "FutureDrafts\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    }
+}

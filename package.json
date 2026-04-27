@@ -1,0 +1,17 @@
+{
+  "name": "future-drafts",
+  "version": "0.1.0",
+  "description": "WordPress dashboard widget for time-delayed drafts.",
+  "private": true,
+  "scripts": {
+    "build": "wp-scripts build",
+    "start": "wp-scripts start",
+    "lint:js": "wp-scripts lint-js",
+    "test:js": "wp-scripts test-unit-js",
+    "wp-env": "wp-env"
+  },
+  "devDependencies": {
+    "@wordpress/scripts": "^28.0.0",
+    "@wordpress/env": "^10.0.0"
+  }
+}
