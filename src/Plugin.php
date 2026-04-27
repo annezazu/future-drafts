@@ -3,6 +3,10 @@ declare(strict_types=1);
 
 namespace FutureDrafts;
 
+use FutureDrafts\Dashboard\Widget;
+use FutureDrafts\Hooks\CleanupOnPublish;
+use FutureDrafts\Rest\Controller;
+
 final class Plugin
 {
     public function __construct(private readonly string $pluginFile)
@@ -11,11 +15,10 @@ final class Plugin
 
     public function register(): void
     {
-        // Wired up in subsequent commits:
-        //   (new PostMeta())->register();
-        //   (new Dashboard\Widget($this->pluginFile))->register();
-        //   (new Rest\Controller())->register();
-        //   (new Hooks\CleanupOnPublish())->register();
+        add_action('init', [new PostMeta(), 'register']);
+        (new Widget($this->pluginFile))->register();
+        (new Controller())->register();
+        (new CleanupOnPublish())->register();
     }
 
     public function pluginFile(): string
