@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from '@wordpress/element';
-import { Spinner, Notice } from '@wordpress/components';
+import { Spinner, Notice, Button } from '@wordpress/components';
 import { __, sprintf, _n } from '@wordpress/i18n';
+import { chevronDown, chevronRight } from '@wordpress/icons';
 import CaptureForm from './CaptureForm';
 import EntryRow from './EntryRow';
 import { listEntries, snoozeEntry, deleteEntry } from './api';
@@ -48,7 +49,6 @@ export default function App() {
 
 	const due = data?.due || [];
 	const pending = data?.pending || [];
-	const isEmpty = data && due.length === 0 && pending.length === 0;
 	const showPendingExpanded = pendingExpanded || pending.length <= 2;
 
 	return (
@@ -56,12 +56,6 @@ export default function App() {
 			{ SUBTITLE && <div className="future-drafts__subtitle">{ SUBTITLE }</div> }
 
 			<CaptureForm onCreated={ onCreated } />
-
-			{ isEmpty && (
-				<p className="future-drafts__empty-hint">
-					{ __( "Capture an experience now. We'll bring it back when you're ready to write about it.", 'future-drafts' ) }
-				</p>
-			) }
 
 			{ error && <Notice status="error" onRemove={ () => setError( null ) }>{ error }</Notice> }
 
@@ -84,9 +78,11 @@ export default function App() {
 
 			{ pending.length > 0 && (
 				<section className="future-drafts__section future-drafts__section--pending">
-					<button
-						type="button"
-						className="future-drafts__pending-toggle"
+					<Button
+						variant="tertiary"
+						size="small"
+						icon={ showPendingExpanded ? chevronDown : chevronRight }
+						iconPosition="left"
 						onClick={ () => setPendingExpanded( ( v ) => ! v ) }
 						aria-expanded={ showPendingExpanded }
 					>
@@ -95,8 +91,7 @@ export default function App() {
 							_n( '%d draft waiting', '%d drafts waiting', pending.length, 'future-drafts' ),
 							pending.length
 						) }
-						<span aria-hidden="true">{ showPendingExpanded ? ' ▾' : ' ▸' }</span>
-					</button>
+					</Button>
 					{ showPendingExpanded &&
 						pending.map( ( entry ) => (
 							<EntryRow

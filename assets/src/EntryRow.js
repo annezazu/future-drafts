@@ -1,6 +1,7 @@
 import { Button, ConfirmDialog } from '@wordpress/components';
 import { useState } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
+import { closeSmall, arrowRight } from '@wordpress/icons';
 import SnoozeMenu from './SnoozeMenu';
 import { today } from './api';
 
@@ -36,19 +37,24 @@ export default function EntryRow( { entry, variant, onSnooze, onDelete } ) {
 			</div>
 			<div className="future-drafts-row__actions">
 				{ isDue && (
-					<Button variant="primary" size="small" href={ entry.edit_url }>
-						{ __( 'Finish writing →', 'future-drafts' ) }
+					<Button
+						variant="primary"
+						size="small"
+						href={ entry.edit_url }
+						icon={ arrowRight }
+						iconPosition="right"
+					>
+						{ __( 'Finish writing', 'future-drafts' ) }
 					</Button>
 				) }
 				<SnoozeMenu onSnooze={ ( date ) => onSnooze( entry, date ) } />
 				<Button
 					variant="tertiary"
 					size="small"
+					icon={ closeSmall }
 					label={ __( 'Delete', 'future-drafts' ) }
 					onClick={ () => setConfirmingDelete( true ) }
-				>
-					×
-				</Button>
+				/>
 			</div>
 			{ confirmingDelete && (
 				<ConfirmDialog

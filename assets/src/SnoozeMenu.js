@@ -7,6 +7,7 @@ import {
 	DatePicker,
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
+import { chevronDown } from '@wordpress/icons';
 import { today, addDays, addMonths } from './api';
 
 const PRESETS = [
@@ -26,10 +27,12 @@ export default function SnoozeMenu( { onSnooze } ) {
 				<Button
 					variant="tertiary"
 					size="small"
+					icon={ chevronDown }
+					iconPosition="right"
 					onClick={ onToggle }
 					aria-expanded={ isOpen }
 				>
-					{ __( 'Snooze ▾', 'future-drafts' ) }
+					{ __( 'Snooze', 'future-drafts' ) }
 				</Button>
 			) }
 			renderContent={ ( { onClose } ) =>
