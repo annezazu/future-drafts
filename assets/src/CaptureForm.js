@@ -1,5 +1,6 @@
 import { useState } from '@wordpress/element';
 import {
+	BaseControl,
 	Button,
 	TextControl,
 	TextareaControl,
@@ -54,24 +55,25 @@ export default function CaptureForm( { onCreated } ) {
 	return (
 		<div className="future-drafts-capture">
 			<TextControl
-				label={ __( 'Title', 'future-drafts' ) }
+				label={ __( 'Title of Post', 'future-drafts' ) }
 				value={ title }
 				onChange={ setTitle }
 				__next40pxDefaultSize
 				__nextHasNoMarginBottom
 			/>
 			<TextareaControl
-				label={ __( "What's coming up for you?", 'future-drafts' ) }
+				label={ __( 'Get a heads start', 'future-drafts' ) }
 				placeholder={ __( 'A few notes for your future self…', 'future-drafts' ) }
 				value={ content }
 				onChange={ setContent }
 				rows={ 3 }
 				__nextHasNoMarginBottom
 			/>
-			<div className="future-drafts-capture__date">
-				<div className="future-drafts-capture__date-label">
-					{ __( 'Remind me on', 'future-drafts' ) }
-				</div>
+			<BaseControl
+				__nextHasNoMarginBottom
+				label={ __( 'Remind me to pick this back up', 'future-drafts' ) }
+				id="future-drafts-capture-date"
+			>
 				<Flex gap={ 2 } justify="flex-start" wrap>
 					{ PRESETS.map( ( p ) => (
 						<FlexItem key={ p.key }>
@@ -113,7 +115,7 @@ export default function CaptureForm( { onCreated } ) {
 						/>
 					</FlexItem>
 				</Flex>
-			</div>
+			</BaseControl>
 			{ error && <Notice status="error" isDismissible={ false }>{ error }</Notice> }
 			<div className="future-drafts-capture__actions">
 				<Button
