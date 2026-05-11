@@ -1,4 +1,7 @@
-import { Button, ConfirmDialog } from '@wordpress/components';
+import {
+	Button,
+	__experimentalConfirmDialog as ConfirmDialog,
+} from '@wordpress/components';
 import { useState } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
 import { trash } from '@wordpress/icons';
@@ -61,8 +64,12 @@ export default function EntryRow( { entry, variant, onSnooze, onDelete } ) {
 					} }
 					onCancel={ () => setConfirmingDelete( false ) }
 					confirmButtonText={ __( 'Delete', 'future-drafts' ) }
+					cancelButtonText={ __( 'Never mind', 'future-drafts' ) }
 				>
-					{ __( 'Delete this future draft? This will trash the post.', 'future-drafts' ) }
+					{ __(
+						"Just double checking you want to delete this draft. It can't be undone.",
+						'future-drafts'
+					) }
 				</ConfirmDialog>
 			) }
 		</div>
