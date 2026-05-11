@@ -55,12 +55,6 @@ export default function App() {
 		<div className="future-drafts">
 			{ SUBTITLE && <div className="future-drafts__subtitle">{ SUBTITLE }</div> }
 
-			<CaptureForm onCreated={ onCreated } />
-
-			{ error && <Notice status="error" onRemove={ () => setError( null ) }>{ error }</Notice> }
-
-			{ data === null && <Spinner /> }
-
 			{ due.length > 0 && (
 				<section className="future-drafts__section future-drafts__section--due">
 					<h3 className="future-drafts__heading">{ __( 'Ready to write', 'future-drafts' ) }</h3>
@@ -75,6 +69,12 @@ export default function App() {
 					) ) }
 				</section>
 			) }
+
+			<CaptureForm onCreated={ onCreated } />
+
+			{ error && <Notice status="error" onRemove={ () => setError( null ) }>{ error }</Notice> }
+
+			{ data === null && <Spinner /> }
 
 			{ pending.length > 0 && (
 				<section className="future-drafts__section future-drafts__section--pending">
