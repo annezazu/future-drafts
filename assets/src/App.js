@@ -49,7 +49,6 @@ export default function App() {
 
 	const due = data?.due || [];
 	const pending = data?.pending || [];
-	const showPendingExpanded = pendingExpanded || pending.length <= 2;
 	const isEmpty = data !== null && due.length === 0 && pending.length === 0;
 	const pendingCount = sprintf(
 		/* translators: %d: number of pending drafts */
@@ -95,20 +94,16 @@ export default function App() {
 
 			{ pending.length > 0 && (
 				<section className="future-drafts__section future-drafts__section--pending">
-					{ pending.length > 2 ? (
-						<button
-							type="button"
-							className="future-drafts__pending-count future-drafts__pending-count--toggle"
-							onClick={ () => setPendingExpanded( ( v ) => ! v ) }
-							aria-expanded={ showPendingExpanded }
-						>
-							<span>{ pendingCount }</span>
-							{ showPendingExpanded ? chevronUp : chevronDown }
-						</button>
-					) : (
-						<p className="future-drafts__pending-count">{ pendingCount }</p>
-					) }
-					{ showPendingExpanded &&
+					<button
+						type="button"
+						className="future-drafts__pending-count future-drafts__pending-count--toggle"
+						onClick={ () => setPendingExpanded( ( v ) => ! v ) }
+						aria-expanded={ pendingExpanded }
+					>
+						<span>{ pendingCount }</span>
+						{ pendingExpanded ? chevronUp : chevronDown }
+					</button>
+					{ pendingExpanded &&
 						pending.map( ( entry ) => (
 							<EntryRow
 								key={ entry.id }
