@@ -57,7 +57,7 @@ export default function App() {
 
 			{ due.length > 0 && (
 				<section className="future-drafts__section future-drafts__section--due">
-					<h3 className="future-drafts__heading">{ __( 'Ready to write', 'future-drafts' ) }</h3>
+					<h3 className="future-drafts__heading">{ __( 'Pick this draft back up', 'future-drafts' ) }</h3>
 					{ due.map( ( entry ) => (
 						<EntryRow
 							key={ entry.id }
