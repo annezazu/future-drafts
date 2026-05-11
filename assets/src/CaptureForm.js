@@ -32,7 +32,7 @@ export default function CaptureForm( { onCreated } ) {
 			return null;
 		}
 		const rect = triggerRef.current.getBoundingClientRect();
-		return { top: rect.top - 175, left: rect.right + 8 };
+		return { top: rect.top - 150, left: rect.right + 8 };
 	}, [] );
 
 	const openPicker = () => {
