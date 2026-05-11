@@ -10,6 +10,7 @@ const SUBTITLE = ( window.futureDrafts && window.futureDrafts.subtitle ) || '';
 export default function App() {
 	const [ data, setData ] = useState( null );
 	const [ error, setError ] = useState( null );
+	const [ pendingExpanded, setPendingExpanded ] = useState( false );
 
 	const reload = useCallback( async () => {
 		try {
@@ -47,7 +48,13 @@ export default function App() {
 
 	const due = data?.due || [];
 	const pending = data?.pending || [];
+	const showPendingExpanded = pendingExpanded || pending.length <= 2;
 	const isEmpty = data !== null && due.length === 0 && pending.length === 0;
+	const pendingCount = sprintf(
+		/* translators: %d: number of pending drafts */
+		_n( '%d draft waiting', '%d drafts waiting', pending.length, 'future-drafts' ),
+		pending.length
+	);
 
 	return (
 		<div className="future-drafts">
@@ -85,22 +92,28 @@ export default function App() {
 
 			{ pending.length > 0 && (
 				<section className="future-drafts__section future-drafts__section--pending">
-					<p className="future-drafts__pending-count">
-						{ sprintf(
-							/* translators: %d: number of pending drafts */
-							_n( '%d draft waiting', '%d drafts waiting', pending.length, 'future-drafts' ),
-							pending.length
-						) }
-					</p>
-					{ pending.map( ( entry ) => (
-						<EntryRow
-							key={ entry.id }
-							entry={ entry }
-							variant="pending"
-							onSnooze={ onSnooze }
-							onDelete={ onDelete }
-						/>
-					) ) }
+					{ pending.length > 2 ? (
+						<button
+							type="button"
+							className="future-drafts__pending-count future-drafts__pending-count--toggle"
+							onClick={ () => setPendingExpanded( ( v ) => ! v ) }
+							aria-expanded={ showPendingExpanded }
+						>
+							{ pendingCount }
+						</button>
+					) : (
+						<p className="future-drafts__pending-count">{ pendingCount }</p>
+					) }
+					{ showPendingExpanded &&
+						pending.map( ( entry ) => (
+							<EntryRow
+								key={ entry.id }
+								entry={ entry }
+								variant="pending"
+								onSnooze={ onSnooze }
+								onDelete={ onDelete }
+							/>
+						) ) }
 				</section>
 			) }
 		</div>

@@ -36,6 +36,20 @@
 
 	&__pending-count {
 		margin: 0 0 8px;
+		font: inherit;
+		color: inherit;
+
+		// Strip <button> chrome when used as the toggle so it reads as
+		// plain paragraph text. cursor: pointer is the only affordance.
+		&--toggle {
+			display: block;
+			width: 100%;
+			padding: 0;
+			background: none;
+			border: 0;
+			text-align: left;
+			cursor: pointer;
+		}
 	}
 
 }
