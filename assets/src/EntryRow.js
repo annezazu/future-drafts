@@ -48,6 +48,7 @@ export default function EntryRow( { entry, variant, onSnooze, onDelete } ) {
 					variant="tertiary"
 					size="small"
 					icon={ trash }
+					className="future-drafts-row__delete"
 					label={ __( 'Delete', 'future-drafts' ) }
 					onClick={ () => setConfirmingDelete( true ) }
 				/>
