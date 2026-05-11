@@ -73,12 +73,13 @@
 		}
 
 		// Strip <button> chrome when used as the toggle so it reads as
-		// plain paragraph text. Flex layout puts the count on the left
-		// and the chevron at the right end of the line.
+		// plain paragraph text. Flex layout groups the count and the
+		// chevron together so the chevron sits flush against the end
+		// of the text instead of at the far right of the band.
 		&--toggle {
 			display: flex;
 			align-items: center;
-			justify-content: space-between;
+			justify-content: flex-start;
 			gap: 4px;
 			width: 100%;
 			padding: 0;
