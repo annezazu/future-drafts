@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from '@wordpress/element';
 import { Spinner, Notice } from '@wordpress/components';
 import { __, sprintf, _n } from '@wordpress/i18n';
+import { chevronUp, chevronDown } from '@wordpress/icons';
 import CaptureForm from './CaptureForm';
 import EntryRow from './EntryRow';
 import { listEntries, snoozeEntry, deleteEntry } from './api';
@@ -101,7 +102,8 @@ export default function App() {
 							onClick={ () => setPendingExpanded( ( v ) => ! v ) }
 							aria-expanded={ showPendingExpanded }
 						>
-							{ pendingCount }
+							<span>{ pendingCount }</span>
+							{ showPendingExpanded ? chevronUp : chevronDown }
 						</button>
 					) : (
 						<p className="future-drafts__pending-count">{ pendingCount }</p>

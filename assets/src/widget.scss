@@ -73,15 +73,25 @@
 		}
 
 		// Strip <button> chrome when used as the toggle so it reads as
-		// plain paragraph text. cursor: pointer is the only affordance.
+		// plain paragraph text. Flex layout puts the count on the left
+		// and the chevron at the right end of the line.
 		&--toggle {
-			display: block;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 4px;
 			width: 100%;
 			padding: 0;
 			background: none;
 			border: 0;
 			text-align: inherit;
 			cursor: pointer;
+		}
+
+		svg {
+			width: 18px;
+			height: 18px;
+			flex-shrink: 0;
 		}
 	}
 
