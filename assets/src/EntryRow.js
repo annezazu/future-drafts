@@ -67,7 +67,7 @@ export default function EntryRow( { entry, variant, onSnooze, onDelete } ) {
 					cancelButtonText={ __( 'Never mind', 'future-drafts' ) }
 				>
 					{ __(
-						"Just double checking you want to delete this draft. It can't be undone.",
+						'Move this draft to the Trash? You can restore it from Posts → Trash.',
 						'future-drafts'
 					) }
 				</ConfirmDialog>
