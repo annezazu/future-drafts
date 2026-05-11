@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Future Drafts
  * Description: Drafts for your future self. Capture an experience now; finish writing about it later.
- * Version:     0.2.1
+ * Version:     0.2.2
  * Author:      Anne McCarthy
  * License:     GPL-2.0-or-later
  * Text Domain: future-drafts

@@ -50,10 +50,13 @@ export default function App() {
 	const due = data?.due || [];
 	const pending = data?.pending || [];
 	const showPendingExpanded = pendingExpanded || pending.length <= 2;
+	const isEmpty = data !== null && due.length === 0 && pending.length === 0;
 
 	return (
 		<div className="future-drafts">
-			{ SUBTITLE && <div className="future-drafts__subtitle">{ SUBTITLE }</div> }
+			{ SUBTITLE && isEmpty && (
+				<div className="future-drafts__subtitle">{ SUBTITLE }</div>
+			) }
 
 			{ due.length > 0 && (
 				<section className="future-drafts__section future-drafts__section--due">
