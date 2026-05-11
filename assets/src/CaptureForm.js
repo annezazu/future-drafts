@@ -1,9 +1,6 @@
 import { useState } from '@wordpress/element';
 import {
-	BaseControl,
 	Button,
-	TextControl,
-	TextareaControl,
 	DatePicker,
 	Dropdown,
 	Notice,
@@ -54,26 +51,39 @@ export default function CaptureForm( { onCreated } ) {
 
 	return (
 		<div className="future-drafts-capture">
-			<TextControl
-				label={ __( 'Title of Post', 'future-drafts' ) }
-				value={ title }
-				onChange={ setTitle }
-				__next40pxDefaultSize
-				__nextHasNoMarginBottom
-			/>
-			<TextareaControl
-				label={ __( 'Get a heads start', 'future-drafts' ) }
-				placeholder={ __( 'A few notes for your future self…', 'future-drafts' ) }
-				value={ content }
-				onChange={ setContent }
-				rows={ 3 }
-				__nextHasNoMarginBottom
-			/>
-			<BaseControl
-				__nextHasNoMarginBottom
-				label={ __( 'Remind me to pick this back up', 'future-drafts' ) }
-				id="future-drafts-capture-date"
-			>
+			<div className="input-text-wrap">
+				<label htmlFor="future-drafts-title">
+					{ __( 'Title of Post', 'future-drafts' ) }
+				</label>
+				<input
+					type="text"
+					id="future-drafts-title"
+					name="future-drafts-title"
+					value={ title }
+					onChange={ ( e ) => setTitle( e.target.value ) }
+					autoComplete="off"
+				/>
+			</div>
+
+			<div className="textarea-wrap">
+				<label htmlFor="future-drafts-content">
+					{ __( 'Get a heads start', 'future-drafts' ) }
+				</label>
+				<textarea
+					id="future-drafts-content"
+					name="future-drafts-content"
+					placeholder={ __( 'A few notes for your future self…', 'future-drafts' ) }
+					rows={ 3 }
+					value={ content }
+					onChange={ ( e ) => setContent( e.target.value ) }
+					autoComplete="off"
+				/>
+			</div>
+
+			<div className="future-drafts-capture__date">
+				<label htmlFor="future-drafts-date-toggle">
+					{ __( 'Remind me to pick this back up', 'future-drafts' ) }
+				</label>
 				<Flex gap={ 2 } justify="flex-start" wrap>
 					{ PRESETS.map( ( p ) => (
 						<FlexItem key={ p.key }>
@@ -91,6 +101,7 @@ export default function CaptureForm( { onCreated } ) {
 							popoverProps={ { placement: 'bottom-start' } }
 							renderToggle={ ( { isOpen, onToggle } ) => (
 								<Button
+									id="future-drafts-date-toggle"
 									variant="link"
 									className="future-drafts-capture__date-link"
 									onClick={ onToggle }
@@ -115,7 +126,8 @@ export default function CaptureForm( { onCreated } ) {
 						/>
 					</FlexItem>
 				</Flex>
-			</BaseControl>
+			</div>
+
 			{ error && <Notice status="error" isDismissible={ false }>{ error }</Notice> }
 			<div className="future-drafts-capture__actions">
 				<Button
