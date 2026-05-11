@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from '@wordpress/element';
-import { Spinner, Notice, Button } from '@wordpress/components';
+import { Spinner, Notice } from '@wordpress/components';
 import { __, sprintf, _n } from '@wordpress/i18n';
-import { chevronDown, chevronRight } from '@wordpress/icons';
 import CaptureForm from './CaptureForm';
 import EntryRow from './EntryRow';
 import { listEntries, snoozeEntry, deleteEntry } from './api';
@@ -11,7 +10,6 @@ const SUBTITLE = ( window.futureDrafts && window.futureDrafts.subtitle ) || '';
 export default function App() {
 	const [ data, setData ] = useState( null );
 	const [ error, setError ] = useState( null );
-	const [ pendingExpanded, setPendingExpanded ] = useState( false );
 
 	const reload = useCallback( async () => {
 		try {
@@ -49,7 +47,6 @@ export default function App() {
 
 	const due = data?.due || [];
 	const pending = data?.pending || [];
-	const showPendingExpanded = pendingExpanded || pending.length <= 2;
 	const isEmpty = data !== null && due.length === 0 && pending.length === 0;
 
 	return (
@@ -88,30 +85,22 @@ export default function App() {
 
 			{ pending.length > 0 && (
 				<section className="future-drafts__section future-drafts__section--pending">
-					<Button
-						variant="tertiary"
-						size="small"
-						icon={ showPendingExpanded ? chevronDown : chevronRight }
-						iconPosition="left"
-						onClick={ () => setPendingExpanded( ( v ) => ! v ) }
-						aria-expanded={ showPendingExpanded }
-					>
+					<p className="future-drafts__pending-count">
 						{ sprintf(
 							/* translators: %d: number of pending drafts */
 							_n( '%d draft waiting', '%d drafts waiting', pending.length, 'future-drafts' ),
 							pending.length
 						) }
-					</Button>
-					{ showPendingExpanded &&
-						pending.map( ( entry ) => (
-							<EntryRow
-								key={ entry.id }
-								entry={ entry }
-								variant="pending"
-								onSnooze={ onSnooze }
-								onDelete={ onDelete }
-							/>
-						) ) }
+					</p>
+					{ pending.map( ( entry ) => (
+						<EntryRow
+							key={ entry.id }
+							entry={ entry }
+							variant="pending"
+							onSnooze={ onSnooze }
+							onDelete={ onDelete }
+						/>
+					) ) }
 				</section>
 			) }
 		</div>
