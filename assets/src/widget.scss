@@ -20,6 +20,18 @@
 			margin-bottom: 14px;
 		}
 
+		// Gray band at the bottom of the widget, full-width to the
+		// postbox edges. -12px left/right cancels .postbox .inside's
+		// 12px horizontal padding so the top border runs corner to
+		// corner. Background + border color mirror the form band in the
+		// ideas-inbox widget so the two read as the same idiom.
+		&--pending {
+			margin: 16px -12px 0;
+			padding: 12px;
+			background: var( --wpds-color-bg-surface-neutral-weak, #f6f7f7 );
+			border-top: 1px solid var( --wpds-color-stroke-surface-neutral-weak, #dcdcde );
+		}
+
 		// The pending toggle is a `<Button variant="tertiary">`. In the dashboard
 		// context the components stylesheet's `--wp-components-color-accent`
 		// mapping doesn't always pick up `--wp-admin-theme-color`, so the toggle
