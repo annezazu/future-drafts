@@ -46,7 +46,7 @@ final class Widget
         $build = plugin_dir_path($this->pluginFile) . 'build/widget.asset.php';
         $asset = file_exists($build)
             ? require $build
-            : ['dependencies' => ['wp-element', 'wp-components', 'wp-api-fetch', 'wp-i18n'], 'version' => '0.1.0'];
+            : ['dependencies' => ['wp-element', 'wp-components', 'wp-api-fetch', 'wp-i18n'], 'version' => '0.2.0'];
 
         wp_enqueue_script(
             self::HANDLE,
@@ -66,7 +66,7 @@ final class Widget
         wp_localize_script(self::HANDLE, 'futureDrafts', [
             'restNamespace' => Controller::NAMESPACE,
             'today'         => wp_date('Y-m-d'),
-            'subtitle'      => __("Drafts for your future self. We'll bring it back when you're ready to write about it.", 'future-drafts'),
+            'subtitle'      => __("Create a draft for your future self. We'll bring it back when you're ready to finish writing.", 'future-drafts'),
         ]);
 
         wp_set_script_translations(self::HANDLE, 'future-drafts');

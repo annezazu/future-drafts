@@ -54,6 +54,34 @@
 		justify-content: flex-end;
 		margin-top: 4px;
 	}
+
+	label {
+		display: inline-block;
+		margin-bottom: 4px;
+	}
+
+	input[type="text"],
+	textarea {
+		width: 100%;
+		box-sizing: border-box;
+		margin: 0;
+	}
+
+	// Link-styled toggle that sits next to the preset buttons. Matches the
+	// secondary-action treatment Draft Sweeper uses for its "Not today" link
+	// (.ds-dismiss): no chrome, admin-scheme accent, underline on hover only.
+	&__date-link.components-button.is-link {
+		color: var( --wp-admin-theme-color, #2271b1 );
+		text-decoration: none;
+		box-shadow: none;
+
+		&:hover:not( :disabled ),
+		&:focus:not( :disabled ),
+		&:focus-visible:not( :disabled ) {
+			color: var( --wp-admin-theme-color, #2271b1 );
+			text-decoration: underline;
+		}
+	}
 }
 
 .future-drafts-row {
@@ -107,7 +135,21 @@
 	}
 }
 
-.future-drafts-snooze__custom,
-.future-drafts-capture__datepicker {
+.future-drafts-snooze__custom {
 	padding: 8px;
+}
+
+// Inline date picker positioned via JS (position: fixed, top/left set
+// from the trigger's getBoundingClientRect) so it sits flush next to
+// the Pick a date link and escapes the dashboard widget's overflow
+// clipping. Top stays put as the calendar height changes; closes on
+// scroll/resize since it can't follow.
+.future-drafts-capture__datepicker {
+	z-index: 100000;
+	min-width: 280px;
+	padding: 12px;
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	box-shadow: 0 4px 12px rgba( 0, 0, 0, 0.08 );
 }

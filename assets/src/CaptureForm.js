@@ -1,11 +1,7 @@
-import { useState } from '@wordpress/element';
+import { useState, useRef, useEffect, useCallback } from '@wordpress/element';
 import {
-	BaseControl,
 	Button,
-	TextControl,
-	TextareaControl,
 	DatePicker,
-	Dropdown,
 	Notice,
 	Flex,
 	FlexItem,
@@ -26,6 +22,56 @@ export default function CaptureForm( { onCreated } ) {
 	const [ date, setDate ] = useState( null );
 	const [ submitting, setSubmitting ] = useState( false );
 	const [ error, setError ] = useState( null );
+	const [ pickerOpen, setPickerOpen ] = useState( false );
+	const [ pickerPos, setPickerPos ] = useState( null );
+	const triggerRef = useRef( null );
+	const pickerRef = useRef( null );
+
+	const computePickerPos = useCallback( () => {
+		if ( ! triggerRef.current ) {
+			return null;
+		}
+		const rect = triggerRef.current.getBoundingClientRect();
+		return { top: rect.top - 150, left: rect.right + 8 };
+	}, [] );
+
+	const openPicker = () => {
+		setPickerPos( computePickerPos() );
+		setPickerOpen( true );
+	};
+
+	useEffect( () => {
+		if ( ! pickerOpen ) {
+			return;
+		}
+		const onDocMouseDown = ( e ) => {
+			if ( triggerRef.current && triggerRef.current.contains( e.target ) ) {
+				return;
+			}
+			if ( pickerRef.current && pickerRef.current.contains( e.target ) ) {
+				return;
+			}
+			setPickerOpen( false );
+		};
+		const onKeyDown = ( e ) => {
+			if ( e.key === 'Escape' ) {
+				setPickerOpen( false );
+			}
+		};
+		const onScrollOrResize = () => {
+			setPickerOpen( false );
+		};
+		document.addEventListener( 'mousedown', onDocMouseDown );
+		document.addEventListener( 'keydown', onKeyDown );
+		window.addEventListener( 'scroll', onScrollOrResize, true );
+		window.addEventListener( 'resize', onScrollOrResize );
+		return () => {
+			document.removeEventListener( 'mousedown', onDocMouseDown );
+			document.removeEventListener( 'keydown', onKeyDown );
+			window.removeEventListener( 'scroll', onScrollOrResize, true );
+			window.removeEventListener( 'resize', onScrollOrResize );
+		};
+	}, [ pickerOpen ] );
 
 	const canSubmit = ( title.trim() !== '' || content.trim() !== '' ) && date && ! submitting;
 
@@ -54,26 +100,39 @@ export default function CaptureForm( { onCreated } ) {
 
 	return (
 		<div className="future-drafts-capture">
-			<TextControl
-				label={ __( 'Title of Post', 'future-drafts' ) }
-				value={ title }
-				onChange={ setTitle }
-				__next40pxDefaultSize
-				__nextHasNoMarginBottom
-			/>
-			<TextareaControl
-				label={ __( 'Get a heads start', 'future-drafts' ) }
-				placeholder={ __( 'A few notes for your future self…', 'future-drafts' ) }
-				value={ content }
-				onChange={ setContent }
-				rows={ 3 }
-				__nextHasNoMarginBottom
-			/>
-			<BaseControl
-				__nextHasNoMarginBottom
-				label={ __( 'Remind me to pick this back up', 'future-drafts' ) }
-				id="future-drafts-capture-date"
-			>
+			<div className="input-text-wrap">
+				<label htmlFor="future-drafts-title">
+					{ __( 'Title of Post', 'future-drafts' ) }
+				</label>
+				<input
+					type="text"
+					id="future-drafts-title"
+					name="future-drafts-title"
+					value={ title }
+					onChange={ ( e ) => setTitle( e.target.value ) }
+					autoComplete="off"
+				/>
+			</div>
+
+			<div className="textarea-wrap">
+				<label htmlFor="future-drafts-content">
+					{ __( 'Get a heads start', 'future-drafts' ) }
+				</label>
+				<textarea
+					id="future-drafts-content"
+					name="future-drafts-content"
+					placeholder={ __( 'A few notes for your future self…', 'future-drafts' ) }
+					rows={ 3 }
+					value={ content }
+					onChange={ ( e ) => setContent( e.target.value ) }
+					autoComplete="off"
+				/>
+			</div>
+
+			<div className="future-drafts-capture__date">
+				<label htmlFor="future-drafts-date-toggle">
+					{ __( 'Remind me to pick this back up', 'future-drafts' ) }
+				</label>
 				<Flex gap={ 2 } justify="flex-start" wrap>
 					{ PRESETS.map( ( p ) => (
 						<FlexItem key={ p.key }>
@@ -87,35 +146,42 @@ export default function CaptureForm( { onCreated } ) {
 						</FlexItem>
 					) ) }
 					<FlexItem>
-						<Dropdown
-							popoverProps={ { placement: 'bottom-start' } }
-							renderToggle={ ( { isOpen, onToggle } ) => (
-								<Button
-									variant="secondary"
-									size="small"
-									onClick={ onToggle }
-									aria-expanded={ isOpen }
-								>
-									{ date
-										? dateI18n( 'M j, Y', `${ date }T00:00:00` )
-										: __( 'Pick a date', 'future-drafts' ) }
-								</Button>
-							) }
-							renderContent={ ( { onClose } ) => (
-								<div className="future-drafts-capture__datepicker">
-									<DatePicker
-										currentDate={ date || undefined }
-										onChange={ ( value ) => {
-											setDate( value ? value.slice( 0, 10 ) : null );
-											onClose();
-										} }
-									/>
-								</div>
-							) }
-						/>
+						<Button
+							ref={ triggerRef }
+							id="future-drafts-date-toggle"
+							variant="link"
+							className="future-drafts-capture__date-link"
+							onClick={ () => ( pickerOpen ? setPickerOpen( false ) : openPicker() ) }
+							aria-expanded={ pickerOpen }
+						>
+							{ date
+								? dateI18n( 'M j, Y', `${ date }T00:00:00` )
+								: __( 'Pick a date', 'future-drafts' ) }
+						</Button>
 					</FlexItem>
 				</Flex>
-			</BaseControl>
+			</div>
+
+			{ pickerOpen && pickerPos && (
+				<div
+					ref={ pickerRef }
+					className="future-drafts-capture__datepicker"
+					style={ {
+						position: 'fixed',
+						top: pickerPos.top,
+						left: pickerPos.left,
+					} }
+				>
+					<DatePicker
+						currentDate={ date || undefined }
+						onChange={ ( value ) => {
+							setDate( value ? value.slice( 0, 10 ) : null );
+							setPickerOpen( false );
+						} }
+					/>
+				</div>
+			) }
+
 			{ error && <Notice status="error" isDismissible={ false }>{ error }</Notice> }
 			<div className="future-drafts-capture__actions">
 				<Button
