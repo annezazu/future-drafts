@@ -46,7 +46,7 @@ final class Widget
         $build = plugin_dir_path($this->pluginFile) . 'build/widget.asset.php';
         $asset = file_exists($build)
             ? require $build
-            : ['dependencies' => ['wp-element', 'wp-components', 'wp-api-fetch', 'wp-i18n'], 'version' => '0.2.3'];
+            : ['dependencies' => ['wp-element', 'wp-components', 'wp-api-fetch', 'wp-i18n'], 'version' => '0.2.4'];
 
         wp_enqueue_script(
             self::HANDLE,

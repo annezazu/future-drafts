@@ -1,3 +1,26 @@
+// When the pending band is showing, treat .inside itself as the gray
+// canvas: zero out its padding, give it the gray background, and let
+// the white __main wrapper carry the non-pending content and recreate
+// the horizontal padding .inside used to provide. The pending section
+// then needs no negative margins — it just sits flush with .inside's
+// (now padding-less) edges, which equal the widget's content edges.
+#future_drafts_widget .inside:has( .future-drafts__section--pending ) {
+	padding: 0;
+	background: var( --wpds-color-bg-surface-neutral-weak, #f6f7f7 );
+	// #dashboard-widgets .postbox has border-radius: 8px and a 1px
+	// border, so the inner content-edge curves with a 7px radius.
+	// Match it on .inside's bottom so the gray bg doesn't square off
+	// the postbox's rounded corners; overflow: hidden clips the
+	// pending section's own bottom corners to the same curve.
+	border-radius: 0 0 7px 7px;
+	overflow: hidden;
+}
+
+#future_drafts_widget .inside:has( .future-drafts__section--pending ) .future-drafts__main {
+	background: #fff;
+	padding: 0 12px 16px;
+}
+
 .future-drafts {
 	font-size: 13px;
 
@@ -20,18 +43,56 @@
 			margin-bottom: 14px;
 		}
 
-		// The pending toggle is a `<Button variant="tertiary">`. In the dashboard
-		// context the components stylesheet's `--wp-components-color-accent`
-		// mapping doesn't always pick up `--wp-admin-theme-color`, so the toggle
-		// renders in the default components blue regardless of admin scheme.
-		// Force the admin theme color so the link reads the active scheme.
-		&--pending .components-button.is-tertiary {
-			color: var( --wp-admin-theme-color, #2271b1 );
+		// Gray band at the bottom of the widget, full-width to the
+		// postbox edges. -12px left/right cancels .postbox .inside's
+		// 12px horizontal padding so the top border runs corner to
+		// corner. Background + border color mirror the form band in the
+		// ideas-inbox widget so the two read as the same idiom.
+		&--pending {
+			margin: 0;
+			padding: 12px;
+			background: var( --wpds-color-bg-surface-neutral-weak, #f6f7f7 );
+			border-top: 1px solid var( --wpds-color-stroke-surface-neutral-weak, #dcdcde );
+		}
 
-			&:hover:not( :disabled ),
-			&:focus:not( :disabled ) {
-				color: var( --wp-admin-theme-color-darker-10, #135e96 );
-			}
+	}
+
+	// The count sits inside .future-drafts__section--pending whose
+	// padding gives it equal top/bottom breathing room. Zero margins
+	// here so when the list is collapsed the count is vertically
+	// centered between the band's top border and its bottom edge;
+	// when expanded, a small margin-bottom restores the gap above
+	// the first row.
+	&__pending-count {
+		margin: 0;
+		font: inherit;
+		color: inherit;
+
+		&:not( :last-child ) {
+			margin-bottom: 8px;
+		}
+
+		// Strip <button> chrome when used as the toggle so it reads as
+		// plain paragraph text. Flex layout groups the count and the
+		// chevron together so the chevron sits flush against the end
+		// of the text instead of at the far right of the band.
+		&--toggle {
+			display: flex;
+			align-items: center;
+			justify-content: flex-start;
+			gap: 4px;
+			width: 100%;
+			padding: 0;
+			background: none;
+			border: 0;
+			text-align: inherit;
+			cursor: pointer;
+		}
+
+		svg {
+			width: 18px;
+			height: 18px;
+			flex-shrink: 0;
 		}
 	}
 
@@ -84,10 +145,6 @@
 	gap: 12px;
 	padding: 8px 0;
 
-	& + & {
-		border-top: 1px solid #f0f0f1;
-	}
-
 	&__main {
 		flex: 1;
 		min-width: 0;
@@ -98,7 +155,7 @@
 		text-decoration: none;
 
 		&:hover {
-			text-decoration: underline;
+			text-decoration: none;
 		}
 	}
 

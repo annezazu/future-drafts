@@ -71,6 +71,8 @@ final class Controller
             'author'         => $userId,
             'posts_per_page' => 200,
             'no_found_rows'  => true,
+            'orderby'        => 'date',
+            'order'          => 'DESC',
             'meta_query'     => [
                 [
                     'key'     => PostMeta::KEY,
@@ -89,9 +91,6 @@ final class Controller
                 $pending[] = $entry;
             }
         }
-
-        usort($due, static fn ($a, $b) => strcmp($a['remind_on'], $b['remind_on']));
-        usort($pending, static fn ($a, $b) => strcmp($a['remind_on'], $b['remind_on']));
 
         return new WP_REST_Response([
             'due'     => $due,

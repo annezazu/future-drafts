@@ -1,6 +1,6 @@
 {
   "name": "future-drafts",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "WordPress dashboard widget for time-delayed drafts.",
   "private": true,
   "scripts": {
