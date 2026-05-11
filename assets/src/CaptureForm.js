@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from '@wordpress/element';
+import { useState, useRef, useEffect, useCallback } from '@wordpress/element';
 import {
 	Button,
 	DatePicker,
@@ -23,27 +23,53 @@ export default function CaptureForm( { onCreated } ) {
 	const [ submitting, setSubmitting ] = useState( false );
 	const [ error, setError ] = useState( null );
 	const [ pickerOpen, setPickerOpen ] = useState( false );
-	const dateRowRef = useRef( null );
+	const [ pickerPos, setPickerPos ] = useState( null );
+	const triggerRef = useRef( null );
+	const pickerRef = useRef( null );
+
+	const computePickerPos = useCallback( () => {
+		if ( ! triggerRef.current ) {
+			return null;
+		}
+		const rect = triggerRef.current.getBoundingClientRect();
+		return { top: rect.top, left: rect.right + 8 };
+	}, [] );
+
+	const openPicker = () => {
+		setPickerPos( computePickerPos() );
+		setPickerOpen( true );
+	};
 
 	useEffect( () => {
 		if ( ! pickerOpen ) {
 			return;
 		}
 		const onDocMouseDown = ( e ) => {
-			if ( dateRowRef.current && ! dateRowRef.current.contains( e.target ) ) {
-				setPickerOpen( false );
+			if ( triggerRef.current && triggerRef.current.contains( e.target ) ) {
+				return;
 			}
+			if ( pickerRef.current && pickerRef.current.contains( e.target ) ) {
+				return;
+			}
+			setPickerOpen( false );
 		};
 		const onKeyDown = ( e ) => {
 			if ( e.key === 'Escape' ) {
 				setPickerOpen( false );
 			}
 		};
+		const onScrollOrResize = () => {
+			setPickerOpen( false );
+		};
 		document.addEventListener( 'mousedown', onDocMouseDown );
 		document.addEventListener( 'keydown', onKeyDown );
+		window.addEventListener( 'scroll', onScrollOrResize, true );
+		window.addEventListener( 'resize', onScrollOrResize );
 		return () => {
 			document.removeEventListener( 'mousedown', onDocMouseDown );
 			document.removeEventListener( 'keydown', onKeyDown );
+			window.removeEventListener( 'scroll', onScrollOrResize, true );
+			window.removeEventListener( 'resize', onScrollOrResize );
 		};
 	}, [ pickerOpen ] );
 
@@ -107,46 +133,54 @@ export default function CaptureForm( { onCreated } ) {
 				<label htmlFor="future-drafts-date-toggle">
 					{ __( 'Remind me to pick this back up', 'future-drafts' ) }
 				</label>
-				<div className="future-drafts-capture__date-row" ref={ dateRowRef }>
-					<Flex gap={ 2 } justify="flex-start" wrap>
-						{ PRESETS.map( ( p ) => (
-							<FlexItem key={ p.key }>
-								<Button
-									variant={ date === p.apply( today() ) ? 'primary' : 'secondary' }
-									size="small"
-									onClick={ () => applyPreset( p ) }
-								>
-									{ p.label }
-								</Button>
-							</FlexItem>
-						) ) }
-						<FlexItem>
+				<Flex gap={ 2 } justify="flex-start" wrap>
+					{ PRESETS.map( ( p ) => (
+						<FlexItem key={ p.key }>
 							<Button
-								id="future-drafts-date-toggle"
-								variant="link"
-								className="future-drafts-capture__date-link"
-								onClick={ () => setPickerOpen( ( o ) => ! o ) }
-								aria-expanded={ pickerOpen }
+								variant={ date === p.apply( today() ) ? 'primary' : 'secondary' }
+								size="small"
+								onClick={ () => applyPreset( p ) }
 							>
-								{ date
-									? dateI18n( 'M j, Y', `${ date }T00:00:00` )
-									: __( 'Pick a date', 'future-drafts' ) }
+								{ p.label }
 							</Button>
 						</FlexItem>
-					</Flex>
-					{ pickerOpen && (
-						<div className="future-drafts-capture__datepicker">
-							<DatePicker
-								currentDate={ date || undefined }
-								onChange={ ( value ) => {
-									setDate( value ? value.slice( 0, 10 ) : null );
-									setPickerOpen( false );
-								} }
-							/>
-						</div>
-					) }
-				</div>
+					) ) }
+					<FlexItem>
+						<Button
+							ref={ triggerRef }
+							id="future-drafts-date-toggle"
+							variant="link"
+							className="future-drafts-capture__date-link"
+							onClick={ () => ( pickerOpen ? setPickerOpen( false ) : openPicker() ) }
+							aria-expanded={ pickerOpen }
+						>
+							{ date
+								? dateI18n( 'M j, Y', `${ date }T00:00:00` )
+								: __( 'Pick a date', 'future-drafts' ) }
+						</Button>
+					</FlexItem>
+				</Flex>
 			</div>
+
+			{ pickerOpen && pickerPos && (
+				<div
+					ref={ pickerRef }
+					className="future-drafts-capture__datepicker"
+					style={ {
+						position: 'fixed',
+						top: pickerPos.top,
+						left: pickerPos.left,
+					} }
+				>
+					<DatePicker
+						currentDate={ date || undefined }
+						onChange={ ( value ) => {
+							setDate( value ? value.slice( 0, 10 ) : null );
+							setPickerOpen( false );
+						} }
+					/>
+				</div>
+			) }
 
 			{ error && <Notice status="error" isDismissible={ false }>{ error }</Notice> }
 			<div className="future-drafts-capture__actions">
