@@ -98,7 +98,7 @@ export default function CaptureForm( { onCreated } ) {
 					) ) }
 					<FlexItem>
 						<Dropdown
-							popoverProps={ { placement: 'bottom-start' } }
+							popoverProps={ { placement: 'right-start' } }
 							renderToggle={ ( { isOpen, onToggle } ) => (
 								<Button
 									id="future-drafts-date-toggle"
