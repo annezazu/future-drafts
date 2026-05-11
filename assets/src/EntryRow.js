@@ -33,7 +33,9 @@ export default function EntryRow( { entry, variant, onSnooze, onDelete } ) {
 				{ entry.excerpt && (
 					<div className="future-drafts-row__excerpt">{ entry.excerpt }</div>
 				) }
-				<div className="future-drafts-row__meta">{ relativeLabel( entry.remind_on ) }</div>
+				{ ! isDue && (
+					<div className="future-drafts-row__meta">{ relativeLabel( entry.remind_on ) }</div>
+				) }
 			</div>
 			<div className="future-drafts-row__actions">
 				{ isDue && (
