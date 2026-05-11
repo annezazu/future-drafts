@@ -1,4 +1,7 @@
-import { Button, ConfirmDialog } from '@wordpress/components';
+import {
+	Button,
+	__experimentalConfirmDialog as ConfirmDialog,
+} from '@wordpress/components';
 import { useState } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
 import { trash } from '@wordpress/icons';
@@ -49,7 +52,7 @@ export default function EntryRow( { entry, variant, onSnooze, onDelete } ) {
 					size="small"
 					icon={ trash }
 					className="future-drafts-row__delete"
-					label={ __( 'Delete', 'future-drafts' ) }
+					label={ __( 'Trash', 'future-drafts' ) }
 					onClick={ () => setConfirmingDelete( true ) }
 				/>
 			</div>
@@ -60,9 +63,13 @@ export default function EntryRow( { entry, variant, onSnooze, onDelete } ) {
 						onDelete( entry );
 					} }
 					onCancel={ () => setConfirmingDelete( false ) }
-					confirmButtonText={ __( 'Delete', 'future-drafts' ) }
+					confirmButtonText={ __( 'Trash', 'future-drafts' ) }
+					cancelButtonText={ __( 'Never mind', 'future-drafts' ) }
 				>
-					{ __( 'Delete this future draft? This will trash the post.', 'future-drafts' ) }
+					{ __(
+						'Move this draft to the Trash? You can restore it from Posts → Trash.',
+						'future-drafts'
+					) }
 				</ConfirmDialog>
 			) }
 		</div>
