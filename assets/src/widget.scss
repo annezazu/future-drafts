@@ -7,6 +7,13 @@
 #future_drafts_widget .inside:has( .future-drafts__section--pending ) {
 	padding: 0;
 	background: var( --wpds-color-bg-surface-neutral-weak, #f6f7f7 );
+	// #dashboard-widgets .postbox has border-radius: 8px and a 1px
+	// border, so the inner content-edge curves with a 7px radius.
+	// Match it on .inside's bottom so the gray bg doesn't square off
+	// the postbox's rounded corners; overflow: hidden clips the
+	// pending section's own bottom corners to the same curve.
+	border-radius: 0 0 7px 7px;
+	overflow: hidden;
 }
 
 #future_drafts_widget .inside:has( .future-drafts__section--pending ) .future-drafts__main {
