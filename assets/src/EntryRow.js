@@ -52,7 +52,7 @@ export default function EntryRow( { entry, variant, onSnooze, onDelete } ) {
 					size="small"
 					icon={ trash }
 					className="future-drafts-row__delete"
-					label={ __( 'Delete', 'future-drafts' ) }
+					label={ __( 'Trash', 'future-drafts' ) }
 					onClick={ () => setConfirmingDelete( true ) }
 				/>
 			</div>
@@ -63,7 +63,7 @@ export default function EntryRow( { entry, variant, onSnooze, onDelete } ) {
 						onDelete( entry );
 					} }
 					onCancel={ () => setConfirmingDelete( false ) }
-					confirmButtonText={ __( 'Delete', 'future-drafts' ) }
+					confirmButtonText={ __( 'Trash', 'future-drafts' ) }
 					cancelButtonText={ __( 'Never mind', 'future-drafts' ) }
 				>
 					{ __(
