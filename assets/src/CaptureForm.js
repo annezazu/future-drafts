@@ -159,6 +159,16 @@ export default function CaptureForm( { onCreated } ) {
 								: __( 'Pick a date', 'future-drafts' ) }
 						</Button>
 					</FlexItem>
+					<FlexItem className="future-drafts-capture__save">
+						<Button
+							variant="primary"
+							onClick={ submit }
+							disabled={ ! canSubmit }
+							isBusy={ submitting }
+						>
+							{ __( 'Save for later', 'future-drafts' ) }
+						</Button>
+					</FlexItem>
 				</Flex>
 			</div>
 
@@ -183,16 +193,6 @@ export default function CaptureForm( { onCreated } ) {
 			) }
 
 			{ error && <Notice status="error" isDismissible={ false }>{ error }</Notice> }
-			<div className="future-drafts-capture__actions">
-				<Button
-					variant="primary"
-					onClick={ submit }
-					disabled={ ! canSubmit }
-					isBusy={ submitting }
-				>
-					{ __( 'Save for later', 'future-drafts' ) }
-				</Button>
-			</div>
 		</div>
 	);
 }
