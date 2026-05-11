@@ -1,11 +1,17 @@
-// When the pending band is showing, drop the postbox .inside's bottom
-// padding so the gray section sits flush against the widget's bottom
-// border. Negative margin-bottom doesn't work for this — a negative
-// margin on the last child only affects what comes after it, so the
-// section's visual edge stays put while .inside's padding-bottom shows
-// through as white.
+// When the pending band is showing, treat .inside itself as the gray
+// canvas: zero out its padding, give it the gray background, and let
+// the white __main wrapper carry the non-pending content and recreate
+// the horizontal padding .inside used to provide. The pending section
+// then needs no negative margins — it just sits flush with .inside's
+// (now padding-less) edges, which equal the widget's content edges.
 #future_drafts_widget .inside:has( .future-drafts__section--pending ) {
-	padding-bottom: 0;
+	padding: 0;
+	background: var( --wpds-color-bg-surface-neutral-weak, #f6f7f7 );
+}
+
+#future_drafts_widget .inside:has( .future-drafts__section--pending ) .future-drafts__main {
+	background: #fff;
+	padding: 0 12px 16px;
 }
 
 .future-drafts {
@@ -36,7 +42,7 @@
 		// corner. Background + border color mirror the form band in the
 		// ideas-inbox widget so the two read as the same idiom.
 		&--pending {
-			margin: 16px -12px 0;
+			margin: 0;
 			padding: 12px;
 			background: var( --wpds-color-bg-surface-neutral-weak, #f6f7f7 );
 			border-top: 1px solid var( --wpds-color-stroke-surface-neutral-weak, #dcdcde );

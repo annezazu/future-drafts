@@ -58,37 +58,39 @@ export default function App() {
 
 	return (
 		<div className="future-drafts">
-			{ SUBTITLE && isEmpty && (
-				<div className="future-drafts__subtitle">{ SUBTITLE }</div>
-			) }
+			<div className="future-drafts__main">
+				{ SUBTITLE && isEmpty && (
+					<div className="future-drafts__subtitle">{ SUBTITLE }</div>
+				) }
 
-			{ due.length > 0 && (
-				<section className="future-drafts__section future-drafts__section--due">
-					<h3 className="future-drafts__heading">
-						{ _n(
-							'Pick this draft back up',
-							'Pick these drafts back up',
-							due.length,
-							'future-drafts'
-						) }
-					</h3>
-					{ due.map( ( entry ) => (
-						<EntryRow
-							key={ entry.id }
-							entry={ entry }
-							variant="due"
-							onSnooze={ onSnooze }
-							onDelete={ onDelete }
-						/>
-					) ) }
-				</section>
-			) }
+				{ due.length > 0 && (
+					<section className="future-drafts__section future-drafts__section--due">
+						<h3 className="future-drafts__heading">
+							{ _n(
+								'Pick this draft back up',
+								'Pick these drafts back up',
+								due.length,
+								'future-drafts'
+							) }
+						</h3>
+						{ due.map( ( entry ) => (
+							<EntryRow
+								key={ entry.id }
+								entry={ entry }
+								variant="due"
+								onSnooze={ onSnooze }
+								onDelete={ onDelete }
+							/>
+						) ) }
+					</section>
+				) }
 
-			<CaptureForm onCreated={ onCreated } />
+				<CaptureForm onCreated={ onCreated } />
 
-			{ error && <Notice status="error" onRemove={ () => setError( null ) }>{ error }</Notice> }
+				{ error && <Notice status="error" onRemove={ () => setError( null ) }>{ error }</Notice> }
 
-			{ data === null && <Spinner /> }
+				{ data === null && <Spinner /> }
+			</div>
 
 			{ pending.length > 0 && (
 				<section className="future-drafts__section future-drafts__section--pending">
