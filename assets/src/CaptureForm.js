@@ -98,7 +98,17 @@ export default function CaptureForm( { onCreated } ) {
 					) ) }
 					<FlexItem>
 						<Dropdown
-							popoverProps={ { placement: 'right-start' } }
+							popoverProps={ {
+								placement: 'right-start',
+								// Lock the top edge to the trigger so the
+								// calendar grows downward as months change
+								// height; without this Floating UI flips
+								// the placement when the popover would
+								// overflow the viewport, which moves the
+								// prev/next chevrons.
+								flip: false,
+								resize: false,
+							} }
 							renderToggle={ ( { isOpen, onToggle } ) => (
 								<Button
 									id="future-drafts-date-toggle"
