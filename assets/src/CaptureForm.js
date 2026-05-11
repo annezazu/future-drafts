@@ -55,14 +55,14 @@ export default function CaptureForm( { onCreated } ) {
 	return (
 		<div className="future-drafts-capture">
 			<TextControl
-				label={ __( 'Title of Post', 'future-drafts' ) }
+				label={ __( 'Title', 'future-drafts' ) }
 				value={ title }
 				onChange={ setTitle }
 				__next40pxDefaultSize
 				__nextHasNoMarginBottom
 			/>
 			<TextareaControl
-				label={ __( 'Get a heads start', 'future-drafts' ) }
+				label={ __( 'Content', 'future-drafts' ) }
 				placeholder={ __( 'A few notes for your future self…', 'future-drafts' ) }
 				value={ content }
 				onChange={ setContent }
@@ -91,8 +91,8 @@ export default function CaptureForm( { onCreated } ) {
 							popoverProps={ { placement: 'bottom-start' } }
 							renderToggle={ ( { isOpen, onToggle } ) => (
 								<Button
-									variant="secondary"
-									size="small"
+									variant="link"
+									className="future-drafts-capture__date-link"
 									onClick={ onToggle }
 									aria-expanded={ isOpen }
 								>

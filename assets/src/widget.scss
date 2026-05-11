@@ -54,6 +54,22 @@
 		justify-content: flex-end;
 		margin-top: 4px;
 	}
+
+	// Link-styled toggle that sits next to the preset buttons. Matches the
+	// secondary-action treatment Draft Sweeper uses for its "Not today" link
+	// (.ds-dismiss): no chrome, admin-scheme accent, underline on hover only.
+	&__date-link.components-button.is-link {
+		color: var( --wp-admin-theme-color, #2271b1 );
+		text-decoration: none;
+		box-shadow: none;
+
+		&:hover:not( :disabled ),
+		&:focus:not( :disabled ),
+		&:focus-visible:not( :disabled ) {
+			color: var( --wp-admin-theme-color, #2271b1 );
+			text-decoration: underline;
+		}
+	}
 }
 
 .future-drafts-row {
