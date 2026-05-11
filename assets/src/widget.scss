@@ -26,7 +26,7 @@
 		// corner. Background + border color mirror the form band in the
 		// ideas-inbox widget so the two read as the same idiom.
 		&--pending {
-			margin: 16px -12px 0;
+			margin: 16px -12px -12px;
 			padding: 12px;
 			background: var( --wpds-color-bg-surface-neutral-weak, #f6f7f7 );
 			border-top: 1px solid var( --wpds-color-stroke-surface-neutral-weak, #dcdcde );
