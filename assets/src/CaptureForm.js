@@ -1,8 +1,7 @@
-import { useState } from '@wordpress/element';
+import { useState, useRef, useEffect } from '@wordpress/element';
 import {
 	Button,
 	DatePicker,
-	Dropdown,
 	Notice,
 	Flex,
 	FlexItem,
@@ -23,6 +22,30 @@ export default function CaptureForm( { onCreated } ) {
 	const [ date, setDate ] = useState( null );
 	const [ submitting, setSubmitting ] = useState( false );
 	const [ error, setError ] = useState( null );
+	const [ pickerOpen, setPickerOpen ] = useState( false );
+	const dateRowRef = useRef( null );
+
+	useEffect( () => {
+		if ( ! pickerOpen ) {
+			return;
+		}
+		const onDocMouseDown = ( e ) => {
+			if ( dateRowRef.current && ! dateRowRef.current.contains( e.target ) ) {
+				setPickerOpen( false );
+			}
+		};
+		const onKeyDown = ( e ) => {
+			if ( e.key === 'Escape' ) {
+				setPickerOpen( false );
+			}
+		};
+		document.addEventListener( 'mousedown', onDocMouseDown );
+		document.addEventListener( 'keydown', onKeyDown );
+		return () => {
+			document.removeEventListener( 'mousedown', onDocMouseDown );
+			document.removeEventListener( 'keydown', onKeyDown );
+		};
+	}, [ pickerOpen ] );
 
 	const canSubmit = ( title.trim() !== '' || content.trim() !== '' ) && date && ! submitting;
 
@@ -84,58 +107,45 @@ export default function CaptureForm( { onCreated } ) {
 				<label htmlFor="future-drafts-date-toggle">
 					{ __( 'Remind me to pick this back up', 'future-drafts' ) }
 				</label>
-				<Flex gap={ 2 } justify="flex-start" wrap>
-					{ PRESETS.map( ( p ) => (
-						<FlexItem key={ p.key }>
+				<div className="future-drafts-capture__date-row" ref={ dateRowRef }>
+					<Flex gap={ 2 } justify="flex-start" wrap>
+						{ PRESETS.map( ( p ) => (
+							<FlexItem key={ p.key }>
+								<Button
+									variant={ date === p.apply( today() ) ? 'primary' : 'secondary' }
+									size="small"
+									onClick={ () => applyPreset( p ) }
+								>
+									{ p.label }
+								</Button>
+							</FlexItem>
+						) ) }
+						<FlexItem>
 							<Button
-								variant={ date === p.apply( today() ) ? 'primary' : 'secondary' }
-								size="small"
-								onClick={ () => applyPreset( p ) }
+								id="future-drafts-date-toggle"
+								variant="link"
+								className="future-drafts-capture__date-link"
+								onClick={ () => setPickerOpen( ( o ) => ! o ) }
+								aria-expanded={ pickerOpen }
 							>
-								{ p.label }
+								{ date
+									? dateI18n( 'M j, Y', `${ date }T00:00:00` )
+									: __( 'Pick a date', 'future-drafts' ) }
 							</Button>
 						</FlexItem>
-					) ) }
-					<FlexItem>
-						<Dropdown
-							popoverProps={ {
-								placement: 'right-start',
-								// Lock the top edge to the trigger so the
-								// calendar grows downward as months change
-								// height; without this Floating UI flips
-								// the placement when the popover would
-								// overflow the viewport, which moves the
-								// prev/next chevrons.
-								flip: false,
-								resize: false,
-							} }
-							renderToggle={ ( { isOpen, onToggle } ) => (
-								<Button
-									id="future-drafts-date-toggle"
-									variant="link"
-									className="future-drafts-capture__date-link"
-									onClick={ onToggle }
-									aria-expanded={ isOpen }
-								>
-									{ date
-										? dateI18n( 'M j, Y', `${ date }T00:00:00` )
-										: __( 'Pick a date', 'future-drafts' ) }
-								</Button>
-							) }
-							renderContent={ ( { onClose } ) => (
-								<div className="future-drafts-capture__datepicker">
-									<DatePicker
-										currentDate={ date || undefined }
-										onChange={ ( value ) => {
-											setDate( value ? value.slice( 0, 10 ) : null );
-											onClose();
-										} }
-									/>
-								</div>
-							) }
-						/>
-					</FlexItem>
-				</Flex>
+					</Flex>
+					{ pickerOpen && (
+						<div className="future-drafts-capture__datepicker">
+							<DatePicker
+								currentDate={ date || undefined }
+								onChange={ ( value ) => {
+									setDate( value ? value.slice( 0, 10 ) : null );
+									setPickerOpen( false );
+								} }
+							/>
+						</div>
+					) }
+				</div>
 			</div>
 
 			{ error && <Notice status="error" isDismissible={ false }>{ error }</Notice> }

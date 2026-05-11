@@ -135,7 +135,28 @@
 	}
 }
 
-.future-drafts-snooze__custom,
-.future-drafts-capture__datepicker {
+.future-drafts-snooze__custom {
 	padding: 8px;
+}
+
+.future-drafts-capture__date-row {
+	position: relative;
+}
+
+// Inline date picker, manually positioned to the right of the trigger
+// row so its top edge stays put as the calendar height changes
+// month-to-month. We render it ourselves instead of using <Dropdown>
+// so Floating UI can't reflow placement when the height grows.
+.future-drafts-capture__datepicker {
+	position: absolute;
+	top: 0;
+	left: 100%;
+	margin-left: 8px;
+	z-index: 100000;
+	min-width: 280px;
+	padding: 12px;
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	box-shadow: 0 4px 12px rgba( 0, 0, 0, 0.08 );
 }
