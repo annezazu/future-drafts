@@ -55,6 +55,20 @@
 		margin-top: 4px;
 	}
 
+	// Match the plain <label> look that core's Quick Draft widget uses on
+	// the dashboard, instead of the @wordpress/components default
+	// (11px / 500 / uppercase emotion typography). Doubled class to win
+	// specificity against the emotion-generated rule.
+	.components-base-control__label.components-base-control__label {
+		font-size: 13px;
+		font-weight: 400;
+		line-height: 1.4;
+		letter-spacing: 0;
+		text-transform: none;
+		color: #1d2327;
+		margin-bottom: 4px;
+	}
+
 	// Link-styled toggle that sits next to the preset buttons. Matches the
 	// secondary-action treatment Draft Sweeper uses for its "Not today" link
 	// (.ds-dismiss): no chrome, admin-scheme accent, underline on hover only.

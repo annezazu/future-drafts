@@ -55,14 +55,14 @@ export default function CaptureForm( { onCreated } ) {
 	return (
 		<div className="future-drafts-capture">
 			<TextControl
-				label={ __( 'Title', 'future-drafts' ) }
+				label={ __( 'Title of Post', 'future-drafts' ) }
 				value={ title }
 				onChange={ setTitle }
 				__next40pxDefaultSize
 				__nextHasNoMarginBottom
 			/>
 			<TextareaControl
-				label={ __( 'Content', 'future-drafts' ) }
+				label={ __( 'Get a heads start', 'future-drafts' ) }
 				placeholder={ __( 'A few notes for your future self…', 'future-drafts' ) }
 				value={ content }
 				onChange={ setContent }
