@@ -26,7 +26,6 @@ export default function SnoozeMenu( { onSnooze } ) {
 			renderToggle={ ( { isOpen, onToggle } ) => (
 				<Button
 					variant="tertiary"
-					size="small"
 					icon={ chevronDown }
 					iconPosition="right"
 					onClick={ onToggle }

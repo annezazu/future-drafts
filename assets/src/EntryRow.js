@@ -1,7 +1,7 @@
 import { Button, ConfirmDialog } from '@wordpress/components';
 import { useState } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
-import { closeSmall, arrowRight } from '@wordpress/icons';
+import { trash } from '@wordpress/icons';
 import SnoozeMenu from './SnoozeMenu';
 import { today } from './api';
 
@@ -33,25 +33,22 @@ export default function EntryRow( { entry, variant, onSnooze, onDelete } ) {
 				{ entry.excerpt && (
 					<div className="future-drafts-row__excerpt">{ entry.excerpt }</div>
 				) }
-				<div className="future-drafts-row__meta">{ relativeLabel( entry.remind_on ) }</div>
+				{ ! isDue && (
+					<div className="future-drafts-row__meta">{ relativeLabel( entry.remind_on ) }</div>
+				) }
 			</div>
 			<div className="future-drafts-row__actions">
+				<SnoozeMenu onSnooze={ ( date ) => onSnooze( entry, date ) } />
 				{ isDue && (
-					<Button
-						variant="primary"
-						size="small"
-						href={ entry.edit_url }
-						icon={ arrowRight }
-						iconPosition="right"
-					>
+					<Button variant="primary" href={ entry.edit_url }>
 						{ __( 'Finish writing', 'future-drafts' ) }
 					</Button>
 				) }
-				<SnoozeMenu onSnooze={ ( date ) => onSnooze( entry, date ) } />
 				<Button
 					variant="tertiary"
 					size="small"
-					icon={ closeSmall }
+					icon={ trash }
+					className="future-drafts-row__delete"
 					label={ __( 'Delete', 'future-drafts' ) }
 					onClick={ () => setConfirmingDelete( true ) }
 				/>
